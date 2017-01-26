@@ -319,6 +319,12 @@ redis_scrypt:
     # multiplier - otherwise update at next job flush
     #margin_switch: 1.25
 
+    # redis host, to override default, if running on docker/docker-compose
+    # or a remote host
+    #redis:
+    #    host: 127.0.0.1
+    #    port: 6379
+
     # A list of jobmanagers to switch between
     #jobmanagers: REQUIRED. Expects []
 

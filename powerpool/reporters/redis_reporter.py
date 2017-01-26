@@ -43,7 +43,8 @@ class RedisReporter(QueueStatReporter):
     one_sec_stats = ['queued']
     gl_methods = ['_queue_proc', '_report_one_min']
     defaults = QueueStatReporter.defaults.copy()
-    defaults.update(dict(redis={}, chain=1))
+    # monkey patch for docker compose
+    defaults.update(dict(redis={'host': '172.13.0.3'}, chain=1))
 
     def __init__(self, config):
         self._configure(config)

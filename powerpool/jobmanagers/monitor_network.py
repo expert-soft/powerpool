@@ -356,11 +356,25 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
         # extranonces so script length is accurate
         extranonce_length = (self.manager.config['extranonce_size'] +
                              self.manager.config['extranonce_serv_size'])
+        coinbase_kwargs = {
+            'addtl_push': [mm_data] if mm_data else [],
+            'extra_script_sig': b'\0' * extranonce_length,
+            'desc_string': self.config['coinbase_string']
+        }
+        try:
+            coinbase = Input.coinbase(self._last_gbt['height'],
+                                      **coinbase_kwargs)
+        except TypeError as e:
+            self.logger.warn('tried to mine a POW '
+                             'block with POS interface'.format(e))
+            coinbase_kwargs.pop('desc_string')
+            coinbase = Input.coinbase(self._last_gbt['height'],
+                                      **coinbase_kwargs)
+
         coinbase.inputs.append(
-            Input.coinbase(self._last_gbt['height'],
-                           addtl_push=[mm_data] if mm_data else [],
-                           extra_script_sig=b'\0' * extranonce_length,
-                           desc_string=self.config['coinbase_string']))
+            coinbase
+        )
+
 
         coinbase_value = self._last_gbt['coinbasevalue']
 

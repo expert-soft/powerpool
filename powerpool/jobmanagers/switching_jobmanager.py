@@ -194,6 +194,10 @@ class MonitorNetworkMulti(Jobmanager):
         return True
 
     def new_job_notif(self, event):
+        if not hasattr('job', event):
+            self.logger.info("No blocks mined yet, skipping switch logic")
+            return 
+        
         currency = event.job.currency
         flush = event.job.type == 0
         if currency == self.current_network:

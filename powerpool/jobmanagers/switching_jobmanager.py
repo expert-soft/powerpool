@@ -11,15 +11,9 @@ from binascii import hexlify
 
 
 class MonitorNetworkMulti(Jobmanager):
-    defaults = config = dict(jobmanagers=None,
-                             profit_poll_int=1,
-                             redis={},
-                             margin_switch=1.2,
-                             exchange_manager={})
-
     def __init__(self, config):
         self._configure(config)
-
+        super(Jobmanager, self).__init__()
         # Since some MonitorNetwork objs are polling and some aren't....
         self.gl_methods = ['update_profit']
 
